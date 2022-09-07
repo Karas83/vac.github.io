@@ -288,7 +288,7 @@
             Try using other filter settings or request a car of your choice.
           </h2>
           <WhiteButton
-            @click="goToInventory"
+            @click="goTo405"
             class="inventory__WhiteButton"
             ButtonText="Request a car"
           />
@@ -610,6 +610,9 @@ export default {
   },
 
   methods: {
+    goTo405() {
+      this.$router.push("/405");
+    },
     showModaltwo: function () {
       this.$refs.modaltwo.show = true;
       var className = "modal-open";
