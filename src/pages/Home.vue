@@ -42,6 +42,7 @@ export default {
     InterestingBlog,
     VacFooter,
     VacPreloader,
+    
   },
   methods: {},
 };
