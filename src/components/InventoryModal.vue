@@ -10,11 +10,9 @@
 </template>
  
 <script>
-
 export default {
   name: "InventoryModal",
-  components: {
-  },
+  components: {},
   data: function () {
     return {
       show: false,
@@ -55,7 +53,7 @@ export default {
   top: 0;
   display: flex;
   flex-direction: column;
-
+  margin-top: 70px;
   &-close {
     color: black;
     cursor: pointer;

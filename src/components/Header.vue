@@ -209,6 +209,7 @@ export default {
 
 @media (max-width: 600px) {
   .header {
+    height: 44px;
     .header__logo {
       align-self: center;
       font-size: 20.2955px;
