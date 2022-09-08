@@ -3,15 +3,103 @@
     <a class="header__logo" href="#/"
       ><img src="@/assets/logo.png" alt="" />VAC</a
     >
-    <WhiteButton @click="goToInventory" class="header__WhiteButton" ButtonText="Inventory" />
-    <BlueButton @click="goTo405" class="header__BlueButton" ButtonText="Request a car" />
+    <WhiteButton
+      @click="goToInventory"
+      class="header__WhiteButton"
+      ButtonText="Inventory"
+    />
+    <BlueButton
+      @click="goTo405"
+      class="header__BlueButton"
+      ButtonText="Request a car"
+    />
 
     <div class="menuButton">
       <div сlass="show-modal-button" @click="showModal">
         <img src="@/assets/menubtn.png" alt="" />
       </div>
-      <modal-menu ref="modal"></modal-menu>
     </div>
+    <modal-menu ref="modal">
+      <template v-slot:body>
+        <div class="modal-close" @click="closeModal">&#10006;</div>
+        <ul>
+          <li class="iventory-menu">
+            <a href="#/inventory" @click="closeModal">Inventory</a>
+          </li>
+          <li><a @click="showModalTwo">Contact us</a></li>
+          <li><a href="#/about" @click="closeModal">About VAC</a></li>
+          <li><a href="#/loan" @click="closeModal">Loan Rates</a></li>
+          <li><a href="#/videos" @click="closeModal">Video</a></li>
+          <li><a href="#/blog" @click="closeModal">Blog</a></li>
+          <li><a href="#/calculator" @click="closeModal">Calculate</a></li>
+        </ul>
+      </template>
+      <template v-slot:footer>
+        <div class="footer">
+          <div class="modal-footer">
+            <a href="https://facebook.com"
+              ><img src="@/assets/Facebook.png" alt=""
+            /></a>
+            <a href="http://instagram.com/"
+              ><img src="@/assets/Instagram.png" alt=""
+            /></a>
+            <a href="https://www.youtube.com/"
+              ><img src="@/assets/YouTube.png" alt=""
+            /></a>
+          </div>
+        </div>
+      </template>
+    </modal-menu>
+    <modal-menu ref="modalTwo">
+      <template v-slot:body>
+        <div class="modal-close" @click="closeModal">&#10006;</div>
+        <div class="contact-modal">
+          <h1>We can't wait to hear from you!</h1>
+          <input type="name" class="name" placeholder="Your Name" />
+          <input
+            type="phone-number"
+            class="phone-number"
+            placeholder="Phone Number"
+          />
+          <input type="email" class="email" placeholder="Email Address" />
+          <BlueButton
+            @click="showModalThree"
+            class="header__BlueButton"
+            ButtonText="contact me"
+          />
+          <h2>You can contact us yourself</h2>
+        </div>
+      </template>
+      <template v-slot:footer>
+        <div class="footer footer-modal2">
+          <div class="modal-footer">
+            <a href="https://facebook.com"
+              ><img src="@/assets/Facebook.png" alt=""
+            /></a>
+            <a href="http://instagram.com/"
+              ><img src="@/assets/Instagram.png" alt=""
+            /></a>
+            <a href="https://www.youtube.com/"
+              ><img src="@/assets/YouTube.png" alt=""
+            /></a>
+          </div>
+        </div>
+      </template>
+    </modal-menu>
+    <modal-menu ref="modalThree">
+      <template v-slot:body>
+        <div class="modal-close" @click="closeModal">&#10006;</div>
+        <div class="successful">
+          <img src="@/assets/Success.png" alt="" />
+          <h1>Application Successful!</h1>
+          <h2>Our manager will contact you in the nearest time.</h2>
+        </div>
+      </template>
+      <template v-slot:footer>
+        <span></span>
+      </template>
+    </modal-menu>
+
     <ModalMenu />
   </div>
 </template>
@@ -34,14 +122,30 @@ export default {
     goToInventory() {
       this.$router.push("/inventory");
     },
-    
+
     goTo405() {
       this.$router.push("/405");
     },
     showModal: function () {
       this.$refs.modal.show = true;
+
       var className = "modal-open";
       document.body.classList.add(className);
+    },
+    showModalTwo: function () {
+      this.$refs.modal.show = false;
+      this.$refs.modalTwo.show = true;
+    },
+    showModalThree: function () {
+      this.$refs.modalThree.show = true;
+      this.$refs.modalTwo.show = false;
+    },
+    closeModal: function () {
+      this.$refs.modal.show = false;
+      this.$refs.modalTwo.show = false;
+      this.$refs.modalThree.show = false;
+      var className = "modal-open";
+      document.body.classList.remove(className);
     },
   },
 };
@@ -49,6 +153,9 @@ export default {
 
 <style scoped lang="scss">
 .header {
+  position: relative;
+  top: 0;
+  z-index: 100;
   font-family: "Gilroy";
   font-style: normal;
   display: flex;
@@ -56,6 +163,7 @@ export default {
   width: 100%;
   height: 44px;
   padding: 18px 0;
+  background-color: white;
   &__logo {
     font-weight: 700;
     font-size: 28px;
@@ -83,6 +191,7 @@ export default {
 }
 @media (max-width: 900px) {
   .header {
+    position: sticky;
     .header__logo {
       margin-left: 20px;
     }

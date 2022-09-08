@@ -11,11 +11,15 @@ export default {
 </script>
 
 <style lang="scss">
+.scroll {
+  overflow-y: scroll;
+}
+
 .modal-open {
   overflow-y: hidden;
 
   @media (min-width: 900px) {
-   padding-right: calc(17px - (100vw - 100%));
+    padding-right: calc(17px - (100vw - 100%));
   }
 }
 </style>

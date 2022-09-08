@@ -1,324 +1,8 @@
 <template>
-  <VacHeader />
-  <div class="inventory">
-    <div class="filter filter-hide">
-      <div class="filter-tittle">
-        <h1>Detailed search</h1>
-        <h2 @click="reset">Clear filters</h2>
-      </div>
-
-      <AccordionList>
-        <AccordionItem>
-          <template #summary> Make, Model </template>
-          <template #icon
-            ><img src="@/assets/arrowbottom.png" alt=""
-          /></template>
-          <div>
-            <h3>Make</h3>
-            <v-select
-              class="select select-make"
-              multiple
-              v-model="makes"
-              :options="['Porshe', 'Mitsubishi', 'Mercedes-Benz', 'Audi']"
-              placeholder="Search Make..."
-            ></v-select>
-          </div>
-          <div>
-            <h3>Model</h3>
-            <v-select
-              class="select"
-              multiple
-              v-model="models"
-              :options="[
-                'Panamera II Turbo S E-Hybrid',
-                'Outlander III Restyling 3',
-                'CLA I (C117, X117) 200',
-                'W124 420',
-                'E-Class III (W211, S211) Restyling 230',
-                'A7 I (4G) S-tronic',
-              ]"
-              placeholder="Search Model..."
-            ></v-select>
-          </div>
-        </AccordionItem>
-        <div class="filter-item">
-          <div v-for="(product, index) in models" :key="product">
-            <label @click="deleteModel(index)"
-              ><span>╳</span>{{ product }}</label
-            >
-          </div>
-          <div v-for="(product, index) in makes" :key="product">
-            <label @click="deleteMake(index)"
-              ><span>╳</span>{{ product }}</label
-            >
-          </div>
-        </div>
-      </AccordionList>
-
-      <AccordionList>
-        <AccordionItem>
-          <template #summary> Body type </template>
-          <template #icon
-            ><img src="@/assets/arrowbottom.png" alt=""
-          /></template>
-          <div class="body-item">
-            <input type="checkbox" id="Trucks" value="Trucks" v-model="bodys" />
-            &nbsp;
-            <label for="Trucks"
-              ><img src="@/assets/Truckicon.png" alt="" />&nbsp;Trucks</label
-            >
-          </div>
-          <div class="body-item">
-            <input type="checkbox" id="SUV" value="SUV" v-model="bodys" />
-            &nbsp;
-            <label for="SUV"
-              ><img src="@/assets/SUVicon.png" alt="" />&nbsp;SUV</label
-            >
-          </div>
-          <div class="body-item">
-            <input type="checkbox" id="Sedan" value="Sedan" v-model="bodys" />
-            &nbsp;
-            <label for="Sedan"
-              ><img src="@/assets/Sedanicon.png" alt="" />&nbsp;Sedan</label
-            >
-          </div>
-          <div class="body-item">
-            <input
-              type="checkbox"
-              id="Hatchback"
-              value="Hatchback"
-              v-model="bodys"
-            />
-            &nbsp;
-            <label for="Hatchback"
-              ><img
-                src="@/assets/Hatchbackicon.png"
-                alt=""
-              />&nbsp;Hatchback</label
-            >
-          </div>
-          <div class="body-item">
-            <input type="checkbox" id="Coupe" value="Coupe" v-model="bodys" />
-            &nbsp;
-            <label for="Coupe">
-              <img src="@/assets/Coupeicon.png" alt="" />&nbsp;Coupe</label
-            >
-          </div>
-          <div class="body-item">
-            <input
-              type="checkbox"
-              id="Convertiable"
-              value="Convertiable"
-              v-model="bodys"
-            />
-            &nbsp;
-            <label for="Convertiable"
-              ><img
-                src="@/assets/Convertiableicon.png"
-                alt=""
-              />&nbsp;Convertiable</label
-            >
-          </div>
-          <div class="body-item">
-            <input type="checkbox" id="VAN" value="VAN" v-model="bodys" />
-            &nbsp;
-            <label for="VAN"
-              ><img src="@/assets/VANicon.png" alt="" />&nbsp;VAN</label
-            >
-          </div>
-        </AccordionItem>
-        <div class="filter-item">
-          <div v-for="product in bodys" :key="product">
-            <label :for="product"><span>╳</span>{{ product }}</label>
-          </div>
-        </div>
-      </AccordionList>
-      <AccordionList>
-        <AccordionItem>
-          <template #summary> Transmission </template>
-          <template #icon
-            ><img src="@/assets/arrowbottom.png" alt=""
-          /></template>
-          <div class="body-item">
-            <input
-              type="checkbox"
-              id="Auto"
-              value="Auto"
-              v-model="transmissions"
-            />&nbsp;
-            <label for="Auto">Auto</label>
-          </div>
-          <div class="body-item">
-            <input
-              type="checkbox"
-              id="Manual"
-              value="Manual"
-              v-model="transmissions"
-            />&nbsp;
-            <label for="Manual">Manual</label>
-          </div>
-        </AccordionItem>
-        <div class="filter-item">
-          <div v-for="product in transmissions" :key="product">
-            <label :for="product"><span>╳</span>{{ product }}</label>
-          </div>
-        </div>
-      </AccordionList>
-
-      <AccordionList>
-        <AccordionItem>
-          <template #summary> Price </template>
-          <template #icon
-            ><img src="@/assets/arrowbottom.png" alt=""
-          /></template>
-          <div class="range-titte">
-            <span>$ {{ minPrice }}</span>
-            <span>$ {{ maxPrice }}</span>
-          </div>
-          <MultiRangeSlider
-            baseClassName="multi-range-slider-bar-only"
-            :min="0"
-            :max="500000"
-            :step="1000"
-            :minValue="minPrice"
-            :maxValue="maxPrice"
-            @input="UpdateValues"
-          />
-        </AccordionItem>
-        <div class="filter-item">
-          <div @click="resetminPrice" v-if="minPrice > 0">
-            <span>╳</span>MIN $ {{ minPrice }}
-          </div>
-          <div @click="resetmaxPrice" v-if="maxPrice < 500000">
-            <span>╳</span>MAX $ {{ maxPrice }}
-          </div>
-        </div>
-      </AccordionList>
-
-      <AccordionList>
-        <AccordionItem>
-          <template #summary> Year </template>
-          <template #icon
-            ><img src="@/assets/arrowbottom.png" alt=""
-          /></template>
-          <div class="range-titte">
-            <span> {{ minYear }}</span>
-            <span> {{ maxYear }}</span>
-          </div>
-          <MultiRangeSlider
-            baseClassName="multi-range-slider-bar-only"
-            :min="1990"
-            :max="2022"
-            :step="1"
-            :minValue="minYear"
-            :maxValue="maxYear"
-            @input="UpdateValues2"
-          />
-        </AccordionItem>
-        <div class="filter-item">
-          <div @click="resetminYear" v-if="minYear > 1990">
-            <span>╳</span>MIN {{ minYear }}
-          </div>
-          <div @click="resetmaxYear" v-if="maxYear < 2020">
-            <span>╳</span>MAX {{ maxYear }}
-          </div>
-        </div>
-      </AccordionList>
-
-      <AccordionList>
-        <AccordionItem>
-          <template #summary> Kilometres </template>
-          <template #icon
-            ><img src="@/assets/arrowbottom.png" alt=""
-          /></template>
-          <div class="range-titte">
-            <span> {{ minKilo }} or less</span>
-          </div>
-          <div class="kilo">
-            <MultiRangeSlider
-              baseClassName="multi-range-slider-bar-only"
-              :min="0"
-              :max="1000000"
-              :step="10000"
-              :minValue="minKilo"
-              :maxValue="maxKilo"
-              @input="UpdateValues3"
-            />
-          </div>
-        </AccordionItem>
-        <div class="filter-item">
-          <div @click="resetminKilo" v-if="minKilo < 990000 && minKilo > 0">
-            <span>╳</span>{{ minKilo }} or less
-          </div>
-        </div>
-      </AccordionList>
-    </div>
-    <div class="main">
-      <div class="main-search">
-        <div @click="showModaltwo" class="search-filter">
-          <img src="@/assets/Filtericon.png" alt="" />
-          <h1>Search Filter</h1>
-        </div>
-        <v-select
-          class="search-fullnames"
-          multiple
-          v-model="fullnames"
-          :options="[
-            'Porshe Panamera II Turbo S E-Hybrid',
-            'Mitsubishi Outlander III Restyling 3',
-            'Mercedes-Benz CLA I (C117, X117) 200',
-            'Mercedes-Benz W124 420',
-            'Mercedes-Benz E-Class III (W211, S211) Restyling 230',
-            'Audi A7 I (4G) S-tronic',
-          ]"
-          placeholder="Find a dream car..."
-        ></v-select>
-        <v-select
-          class="search-sort"
-          v-model="sortcars"
-          :options="['Lowest price', 'Highest prices', 'Recommendations']"
-          placeholder="Sorted by "
-        ></v-select>
-      </div>
-      <div class="main-kards">
-        <div class="zaglyshka" v-if="zagl === 0">
-          <img src="@/assets/zaglyshkaicon.png" alt="" />
-          <h1>Unfortunately there are no matches for your query.</h1>
-          <h2>
-            Try using other filter settings or request a car of your choice.
-          </h2>
-          <WhiteButton
-            @click="goTo405"
-            class="inventory__WhiteButton"
-            ButtonText="Request a car"
-          />
-        </div>
-        <div class="car-card-cont" v-else>
-          <div class="car-kard" v-for="product in zagl" :key="product">
-            <CarKard
-              v-bind:make="product.make"
-              v-bind:model="product.model"
-              v-bind:price="product.price"
-              v-bind:year="product.year"
-              v-bind:body="product.body"
-              v-bind:transmission="product.transmission"
-              v-bind:kilometre="product.kilometre"
-              v-bind:refpass="product.refpass"
-              v-bind:img="product.img"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <InventoryModal />
-
-  <inventory-modal ref="modal"></inventory-modal>
-
-  <inventory-modal ref="modaltwo">
-    <template v-slot:body>
-      <div class="filter">
+  <div class="inventory-cont">
+    <VacHeader />
+    <div class="inventory">
+      <div class="filter filter-hide">
         <div class="filter-tittle">
           <h1>Detailed search</h1>
           <h2 @click="reset">Clear filters</h2>
@@ -575,10 +259,380 @@
           </div>
         </AccordionList>
       </div>
-    </template>
-  </inventory-modal>
+      <div class="main">
+        <div class="main-search">
+          <div @click="showModaltwo" class="search-filter">
+            <img src="@/assets/Filtericon.png" alt="" />
+            <h1>Search Filter</h1>
+          </div>
+          <v-select
+            class="search-fullnames"
+            multiple
+            v-model="fullnames"
+            :options="[
+              'Porshe Panamera II Turbo S E-Hybrid',
+              'Mitsubishi Outlander III Restyling 3',
+              'Mercedes-Benz CLA I (C117, X117) 200',
+              'Mercedes-Benz W124 420',
+              'Mercedes-Benz E-Class III (W211, S211) Restyling 230',
+              'Audi A7 I (4G) S-tronic',
+            ]"
+            placeholder="Find a dream car..."
+          ></v-select>
+          <v-select
+            class="search-sort"
+            v-model="sortcars"
+            :options="['Lowest price', 'Highest prices', 'Recommendations']"
+            placeholder="Sorted by "
+          ></v-select>
+        </div>
+        <div class="main-kards main-kards1">
+          <div class="zaglyshka" v-if="zagl === 0">
+            <img src="@/assets/zaglyshkaicon.png" alt="" />
+            <h1>Unfortunately there are no matches for your query.</h1>
+            <h2>
+              Try using other filter settings or request a car of your choice.
+            </h2>
+            <WhiteButton
+              @click="goTo405"
+              class="inventory__WhiteButton"
+              ButtonText="Request a car"
+            />
+          </div>
+          <div class="car-card-cont" v-else>
+            <div class="car-kard" v-for="product in zagl" :key="product">
+              <CarKard
+                v-bind:make="product.make"
+                v-bind:model="product.model"
+                v-bind:price="product.price"
+                v-bind:year="product.year"
+                v-bind:body="product.body"
+                v-bind:transmission="product.transmission"
+                v-bind:kilometre="product.kilometre"
+                v-bind:refpass="product.refpass"
+                v-bind:img="product.img"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="main-kards main-kards2">
+          <div class="zaglyshka" v-if="applaymas === 0">
+            <img src="@/assets/zaglyshkaicon.png" alt="" />
+            <h1>Unfortunately there are no matches for your query.</h1>
+            <h2>
+              Try using other filter settings or request a car of your choice.
+            </h2>
+            <WhiteButton
+              @click="goTo405"
+              class="inventory__WhiteButton"
+              ButtonText="Request a car"
+            />
+          </div>
+          <div class="car-card-cont" v-else>
+            <div class="car-kard" v-for="product in applaymas" :key="product">
+              <CarKard
+                v-bind:make="product.make"
+                v-bind:model="product.model"
+                v-bind:price="product.price"
+                v-bind:year="product.year"
+                v-bind:body="product.body"
+                v-bind:transmission="product.transmission"
+                v-bind:kilometre="product.kilometre"
+                v-bind:refpass="product.refpass"
+                v-bind:img="product.img"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <VacFooter />
+    <InventoryModal />
+
+    <inventory-modal ref="modal"></inventory-modal>
+
+    <inventory-modal ref="modaltwo">
+      <template v-slot:body>
+        <div class="filter">
+          <div class="filter-tittle">
+            <h1>Detailed search</h1>
+            <h2 @click="reset">Clear filters</h2>
+          </div>
+
+          <AccordionList>
+            <AccordionItem>
+              <template #summary> Make, Model </template>
+              <template #icon
+                ><img src="@/assets/arrowbottom.png" alt=""
+              /></template>
+              <div>
+                <h3>Make</h3>
+                <v-select
+                  class="select select-make"
+                  multiple
+                  v-model="makes"
+                  :options="['Porshe', 'Mitsubishi', 'Mercedes-Benz', 'Audi']"
+                  placeholder="Search Make..."
+                ></v-select>
+              </div>
+              <div>
+                <h3>Model</h3>
+                <v-select
+                  class="select"
+                  multiple
+                  v-model="models"
+                  :options="[
+                    'Panamera II Turbo S E-Hybrid',
+                    'Outlander III Restyling 3',
+                    'CLA I (C117, X117) 200',
+                    'W124 420',
+                    'E-Class III (W211, S211) Restyling 230',
+                    'A7 I (4G) S-tronic',
+                  ]"
+                  placeholder="Search Model..."
+                ></v-select>
+              </div>
+            </AccordionItem>
+            <div class="filter-item">
+              <div v-for="(product, index) in models" :key="product">
+                <label @click="deleteModel(index)"
+                  ><span>╳</span>{{ product }}</label
+                >
+              </div>
+              <div v-for="(product, index) in makes" :key="product">
+                <label @click="deleteMake(index)"
+                  ><span>╳</span>{{ product }}</label
+                >
+              </div>
+            </div>
+          </AccordionList>
+
+          <AccordionList>
+            <AccordionItem>
+              <template #summary> Body type </template>
+              <template #icon
+                ><img src="@/assets/arrowbottom.png" alt=""
+              /></template>
+              <div class="body-item">
+                <input
+                  type="checkbox"
+                  id="Trucks"
+                  value="Trucks"
+                  v-model="bodys"
+                />
+                &nbsp;
+                <label for="Trucks"
+                  ><img
+                    src="@/assets/Truckicon.png"
+                    alt=""
+                  />&nbsp;Trucks</label
+                >
+              </div>
+              <div class="body-item">
+                <input type="checkbox" id="SUV" value="SUV" v-model="bodys" />
+                &nbsp;
+                <label for="SUV"
+                  ><img src="@/assets/SUVicon.png" alt="" />&nbsp;SUV</label
+                >
+              </div>
+              <div class="body-item">
+                <input
+                  type="checkbox"
+                  id="Sedan"
+                  value="Sedan"
+                  v-model="bodys"
+                />
+                &nbsp;
+                <label for="Sedan"
+                  ><img src="@/assets/Sedanicon.png" alt="" />&nbsp;Sedan</label
+                >
+              </div>
+              <div class="body-item">
+                <input
+                  type="checkbox"
+                  id="Hatchback"
+                  value="Hatchback"
+                  v-model="bodys"
+                />
+                &nbsp;
+                <label for="Hatchback"
+                  ><img
+                    src="@/assets/Hatchbackicon.png"
+                    alt=""
+                  />&nbsp;Hatchback</label
+                >
+              </div>
+              <div class="body-item">
+                <input
+                  type="checkbox"
+                  id="Coupe"
+                  value="Coupe"
+                  v-model="bodys"
+                />
+                &nbsp;
+                <label for="Coupe">
+                  <img src="@/assets/Coupeicon.png" alt="" />&nbsp;Coupe</label
+                >
+              </div>
+              <div class="body-item">
+                <input
+                  type="checkbox"
+                  id="Convertiable"
+                  value="Convertiable"
+                  v-model="bodys"
+                />
+                &nbsp;
+                <label for="Convertiable"
+                  ><img
+                    src="@/assets/Convertiableicon.png"
+                    alt=""
+                  />&nbsp;Convertiable</label
+                >
+              </div>
+              <div class="body-item">
+                <input type="checkbox" id="VAN" value="VAN" v-model="bodys" />
+                &nbsp;
+                <label for="VAN"
+                  ><img src="@/assets/VANicon.png" alt="" />&nbsp;VAN</label
+                >
+              </div>
+            </AccordionItem>
+            <div class="filter-item">
+              <div v-for="product in bodys" :key="product">
+                <label :for="product"><span>╳</span>{{ product }}</label>
+              </div>
+            </div>
+          </AccordionList>
+          <AccordionList>
+            <AccordionItem>
+              <template #summary> Transmission </template>
+              <template #icon
+                ><img src="@/assets/arrowbottom.png" alt=""
+              /></template>
+              <div class="body-item">
+                <input
+                  type="checkbox"
+                  id="Auto"
+                  value="Auto"
+                  v-model="transmissions"
+                />&nbsp;
+                <label for="Auto">Auto</label>
+              </div>
+              <div class="body-item">
+                <input
+                  type="checkbox"
+                  id="Manual"
+                  value="Manual"
+                  v-model="transmissions"
+                />&nbsp;
+                <label for="Manual">Manual</label>
+              </div>
+            </AccordionItem>
+            <div class="filter-item">
+              <div v-for="product in transmissions" :key="product">
+                <label :for="product"><span>╳</span>{{ product }}</label>
+              </div>
+            </div>
+          </AccordionList>
+
+          <AccordionList>
+            <AccordionItem>
+              <template #summary> Price </template>
+              <template #icon
+                ><img src="@/assets/arrowbottom.png" alt=""
+              /></template>
+              <div class="range-titte">
+                <span>$ {{ minPrice }}</span>
+                <span>$ {{ maxPrice }}</span>
+              </div>
+              <MultiRangeSlider
+                baseClassName="multi-range-slider-bar-only"
+                :min="0"
+                :max="500000"
+                :step="1000"
+                :minValue="minPrice"
+                :maxValue="maxPrice"
+                @input="UpdateValues"
+              />
+            </AccordionItem>
+            <div class="filter-item">
+              <div @click="resetminPrice" v-if="minPrice > 0">
+                <span>╳</span>MIN $ {{ minPrice }}
+              </div>
+              <div @click="resetmaxPrice" v-if="maxPrice < 500000">
+                <span>╳</span>MAX $ {{ maxPrice }}
+              </div>
+            </div>
+          </AccordionList>
+
+          <AccordionList>
+            <AccordionItem>
+              <template #summary> Year </template>
+              <template #icon
+                ><img src="@/assets/arrowbottom.png" alt=""
+              /></template>
+              <div class="range-titte">
+                <span> {{ minYear }}</span>
+                <span> {{ maxYear }}</span>
+              </div>
+              <MultiRangeSlider
+                baseClassName="multi-range-slider-bar-only"
+                :min="1990"
+                :max="2022"
+                :step="1"
+                :minValue="minYear"
+                :maxValue="maxYear"
+                @input="UpdateValues2"
+              />
+            </AccordionItem>
+            <div class="filter-item">
+              <div @click="resetminYear" v-if="minYear > 1990">
+                <span>╳</span>MIN {{ minYear }}
+              </div>
+              <div @click="resetmaxYear" v-if="maxYear < 2020">
+                <span>╳</span>MAX {{ maxYear }}
+              </div>
+            </div>
+          </AccordionList>
+
+          <AccordionList>
+            <AccordionItem>
+              <template #summary> Kilometres </template>
+              <template #icon
+                ><img src="@/assets/arrowbottom.png" alt=""
+              /></template>
+              <div class="range-titte">
+                <span> {{ minKilo }} or less</span>
+              </div>
+              <div class="kilo">
+                <MultiRangeSlider
+                  baseClassName="multi-range-slider-bar-only"
+                  :min="0"
+                  :max="1000000"
+                  :step="10000"
+                  :minValue="minKilo"
+                  :maxValue="maxKilo"
+                  @input="UpdateValues3"
+                />
+              </div>
+            </AccordionItem>
+            <div class="filter-item">
+              <div @click="resetminKilo" v-if="minKilo < 990000 && minKilo > 0">
+                <span>╳</span>{{ minKilo }} or less
+              </div>
+            </div>
+          </AccordionList>
+          <BlueButton
+            @click="applay"
+            class="InventoryModal__button"
+            ButtonText="Apply"
+          />
+        </div>
+      </template>
+    </inventory-modal>
+
+    <VacFooter />
+  </div>
 </template>
 
 <script>
@@ -586,6 +640,7 @@ import VacHeader from "@/components/Header.vue";
 import CarKard from "@/components/CarKard.vue";
 import VacFooter from "@/components/VacFooter.vue";
 import WhiteButton from "@/components/WhiteButton.vue";
+import BlueButton from "@/components/BlueButton.vue";
 
 import InventoryModal from "@/components/InventoryModal.vue";
 
@@ -607,6 +662,7 @@ export default {
     VacFooter,
     WhiteButton,
     InventoryModal,
+    BlueButton,
   },
 
   methods: {
@@ -640,7 +696,8 @@ export default {
       this.minKilo = 990000;
       this.maxKilo = 1000000;
       this.fullnames = [];
-      (this.sortcars = []), (this.makes = []);
+      this.sortcars = [];
+      this.makes = [];
       this.models = [];
       this.bodys = [];
       this.transmissions = [];
@@ -666,6 +723,21 @@ export default {
     resetminKilo() {
       this.minKilo = 990000;
     },
+    scroll: function () {
+      var className = "scroll";
+      document.body.classList.add(className);
+    },
+    applay() {
+      this.$refs.modaltwo.show = false;
+      var className = "modal-open";
+      document.body.classList.remove(className);
+      if (this.zagl.length) {
+        this.applaymas = this.zagl;
+      } else {
+        this.applaymas = 0;
+      }
+    },
+    prev() {},
   },
 
   data() {
@@ -682,12 +754,8 @@ export default {
       maxYear: 2022,
       minKilo: 990000,
       maxKilo: 1000000,
+      applaymas: [],
 
-      zagly: [
-        {
-          make: "no items",
-        },
-      ],
       cars: [
         {
           fullname: "Porshe Panamera II Turbo S E-Hybrid",
@@ -883,22 +951,32 @@ export default {
 
     zagl() {
       let data = [];
-      // если есть выбранные чекбоксы
       if (this.filterKilo.length) {
-        // фильтруем данные
         data = this.filterKilo;
       } else {
-        // иначе отдаем все данные из массива
         data = 0;
       }
 
       return data;
     },
   },
+  mounted() {
+    this.scroll();
+    this.applaymas = this.cars;
+  },
 };
 </script>
 
 <style  lang="scss">
+.inventory-cont {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  .footer {
+    margin-top: auto;
+  }
+}
 .inventory {
   display: flex;
   flex-direction: row;
@@ -1069,6 +1147,7 @@ export default {
     }
     .search-sort {
       width: 30%;
+      height: 35px;
       .vs__dropdown-menu {
         max-height: 300px;
         border: 1px solid #d7d7d7;
@@ -1165,7 +1244,22 @@ export default {
     display: none;
   }
 }
+.main {
+  .main-kards2 {
+    display: none;
+  }
+}
+
 @media (max-width: 900px) {
+  .main {
+    .main-kards2 {
+      display: flex;
+    }
+    .main-kards1 {
+      display: none;
+    }
+  }
+
   .inventory {
     width: 95%;
     padding: 0 2.5%;

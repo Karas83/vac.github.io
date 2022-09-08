@@ -5,7 +5,7 @@
     <div class="img-cont"></div>
 
     <div class="article-cont">
-      <a href="#blog">
+      <a class="back" href="#blog">
         <span class="back-arrow">❮</span>
         <span class="back-text">BACK</span>
       </a>
@@ -125,7 +125,7 @@ export default {
     border-radius: 5px 5px 0px 0px;
     margin: 10% auto 0;
     z-index: 5;
-    a {
+    .back {
       text-decoration: none;
       position: absolute;
       top: 7%;

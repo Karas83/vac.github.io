@@ -10,8 +10,11 @@
 </template>
  
 <script>
+
 export default {
   name: "InventoryModal",
+  components: {
+  },
   data: function () {
     return {
       show: false,
@@ -29,6 +32,10 @@ export default {
  
 <style scoped
        lang="scss">
+.InventoryModal__button {
+  margin: 10% auto 5%;
+  width: 90%;
+}
 .modal-shadow {
   overflow: auto;
   position: fixed;
@@ -60,12 +67,10 @@ export default {
 }
 @media (max-width: 600px) {
   .modal {
-  &-close {
-
-    position: relative;
-
+    &-close {
+      position: relative;
+    }
   }
-}
 }
 .slide-fade-enter-active {
   transition: all 0.3s ease-out;
